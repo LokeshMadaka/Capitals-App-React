@@ -1,0 +1,11 @@
+FROM node:alpine3.23 AS build
+ADD . /app
+WORKDIR /app
+RUN npm install && \ 
+    npm run build
+
+FROM nginx:alpine3.23-perl AS runtime
+LABEL PROJECT="React Capital App"
+LABEL author="Lokesh"
+COPY --from=build /app/build /usr/share/nginx/html
+EXPOSE 3000
